@@ -1,0 +1,2 @@
+{% extends "base.html" %}
+{% block content %}<section class="mx-auto max-w-7xl px-6 py-12"><h1 class="text-4xl font-black">Global search</h1><form class="mt-6 flex gap-3"><input class="input" name="q" value="{{ query }}" placeholder="Doctors, clinics, articles..."><button class="btn-primary">Search</button></form><div class="mt-8 grid gap-6 md:grid-cols-3">{% for doctor in doctors %}{% include "doctors/_card.html" %}{% else %}<div class="card">Search specialists by name, specialty, or city.</div>{% endfor %}</div></section>{% endblock %}

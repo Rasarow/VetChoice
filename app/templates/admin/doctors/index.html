@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Admin Doctors — VetChoice{% endblock %}
+{% block content %}
+<section class="mx-auto max-w-7xl px-6 py-12">
+    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+            <span class="pill">Admin Panel</span>
+            <h1 class="mt-4 text-4xl font-black">Doctors</h1>
+            <p class="mt-2 text-slate-600">Create, edit, archive, and soft delete manually managed veterinarian profiles.</p>
+        </div>
+        <a class="btn-primary" href="{{ url_for('admin.doctor_create') }}">Add Doctor</a>
+    </div>
+
+    <form class="mt-8 grid gap-3 rounded-[2rem] border border-line bg-soft p-4 md:grid-cols-[1fr_220px_160px]">
+        <input class="input" name="q" value="{{ q }}" placeholder="Search name, city, specialization">
+        <select class="input" name="status">
+            <option value="" {% if not status %}selected{% endif %}>Active</option>
+            <option value="archived" {% if status == 'archived' %}selected{% endif %}>Archived</option>
+            <option value="deleted" {% if status == 'deleted' %}selected{% endif %}>Deleted</option>
+        </select>
+        <button class="btn-primary">Filter</button>
+    </form>
+
+    <div class="mt-8 overflow-hidden rounded-[2rem] border border-line bg-white shadow-soft">
+        <table class="w-full text-left text-sm">
+            <thead class="bg-soft text-slate-500"><tr><th class="p-4">Doctor</th><th class="p-4">Clinic / City</th><th class="p-4">Status</th><th class="p-4">Services</th><th class="p-4">Actions</th></tr></thead>
+            <tbody>
+            {% for doctor in doctors %}
+                <tr class="border-t border-line">
+                    <td class="p-4"><strong>{{ doctor.full_name }}</strong><br><span class="text-slate-500">{{ doctor.primary_specialization or doctor.title }}</span></td>
+                    <td class="p-4">{{ doctor.clinic.name if doctor.clinic else 'No clinic' }}<br><span class="text-slate-500">{{ doctor.city }}</span></td>
+                    <td class="p-4"><span class="tag">{{ doctor.profile_status }}</span><br><span class="mt-2 inline-flex tag">{{ doctor.verification_status }}</span>{% if doctor.is_archived %}<br><span class="mt-2 inline-flex tag">Archived</span>{% endif %}{% if doctor.is_deleted %}<br><span class="mt-2 inline-flex tag">Deleted</span>{% endif %}</td>
+                    <td class="p-4">{{ doctor.doctor_services|length }}</td>
+                    <td class="p-4">
+                        <div class="flex flex-wrap gap-2">
+                            <a class="btn-secondary" href="{{ url_for('admin.doctor_edit', doctor_id=doctor.id) }}">Edit</a>
+                            <a class="btn-secondary" href="{{ url_for('doctors.detail', doctor_id=doctor.id) }}">Public</a>
+                            {% if not doctor.is_deleted %}
+                            <form method="post" action="{{ url_for('admin.doctor_archive', doctor_id=doctor.id) }}"><button class="btn-secondary">{{ 'Unarchive' if doctor.is_archived else 'Archive' }}</button></form>
+                            <form method="post" action="{{ url_for('admin.doctor_delete', doctor_id=doctor.id) }}"><button class="btn-secondary" onclick="return confirm('Soft delete this doctor?')">Delete</button></form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td class="p-6 text-slate-500" colspan="5">No doctors found.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,2 @@
+{% extends "base.html" %}
+{% block content %}<section class="mx-auto max-w-md px-6 py-16"><div class="card"><h1 class="text-3xl font-black">Welcome back</h1><form method="post" class="mt-6 space-y-4">{{ form.hidden_tag() }}{{ form.email(class='input', placeholder='Email') }}{{ form.password(class='input', placeholder='Password') }}<label class="flex gap-2 text-sm">{{ form.remember() }} Remember me</label>{{ form.submit(class='btn-primary w-full') }}</form></div></section>{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="mx-auto max-w-3xl px-6 py-12">
+    <div class="card">
+        <h1 class="text-3xl font-black">{{ title }}</h1>
+        <p class="mt-2 text-slate-600">Add core identification details, a photo, color, special marks, and disease history.</p>
+        <form method="post" class="mt-6 grid gap-4 md:grid-cols-2">
+            {{ form.hidden_tag() }}
+            {% for field in [form.name, form.species, form.breed, form.birth_date, form.gender, form.color, form.special_marks, form.photo_url, form.chip_number] %}
+                <div class="{% if field.name in ['special_marks', 'photo_url'] %}md:col-span-2{% endif %}">
+                    {{ field.label(class='label') }}
+                    {{ field(class='input js-searchable-select' if field.name == 'breed' else 'input') }}
+                    {% if field.name == 'breed' %}<p class="mt-2 text-xs text-slate-500">Start typing after opening the list to find a matching breed. “Without breed” and “Other” are at the end.</p>{% endif %}
+                </div>
+            {% endfor %}
+            <div class="md:col-span-2">{{ form.diseases.label(class='label') }}{{ form.diseases(class='input min-h-24') }}</div>
+            <div class="md:col-span-2">{{ form.submit(class='btn-primary') }}</div>
+        </form>
+    </div>
+</section>
+{% endblock %}

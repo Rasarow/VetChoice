@@ -1,0 +1,6 @@
+<article class="card flex flex-col">
+    <div class="flex items-start gap-4">{% if doctor.public_photo %}<img src="{{ doctor.public_photo }}" alt="{{ doctor.full_name }}" class="h-16 w-16 rounded-2xl object-cover shadow-soft">{% else %}<div class="avatar">{{ doctor.full_name.split()[1][0] if doctor.full_name.split()|length > 1 else doctor.full_name[0] }}</div>{% endif %}<div><h3 class="text-lg font-black">{{ doctor.full_name }}</h3><p class="text-sm text-slate-500">{{ doctor.title }}</p><p class="mt-2 text-sm font-semibold text-primary">★ {{ doctor.rating }} · {{ doctor.reviews|length }} verified reviews</p></div></div>
+    <p class="mt-5 text-sm leading-6 text-slate-600">{{ doctor.specializations }}</p>
+    <div class="mt-5 flex flex-wrap gap-2"><span class="tag">{{ doctor.city }}</span><span class="tag">{{ doctor.public_experience_years }} years</span><span class="tag">{{ doctor.profile_status }}</span>{% if doctor.home_visit %}<span class="tag">Home visit</span>{% endif %}</div>
+    <div class="mt-6 flex items-center justify-between border-t border-line pt-5"><span class="font-black">from ₽{{ doctor.price_from }}</span><a class="btn-secondary" href="{{ url_for('doctors.detail', doctor_id=doctor.id) }}">Profile</a></div>
+</article>
