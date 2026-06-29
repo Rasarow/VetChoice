@@ -6,14 +6,12 @@ from flask import Flask, render_template
 from config import config_by_name
 from .extensions import db, login_manager, mail, migrate
 
-from .models import User
-
-with app.app_context():
-    db.create_all()
 
 def create_app(config_name: str | None = None) -> Flask:
     app = Flask(__name__)
-    app.config.from_object(config_by_name[config_name or os.getenv("FLASK_ENV", "default")])
+    app.config.from_object(
+        config_by_name[config_name or os.getenv("FLASK_ENV", "default")]
+    )
     Path(app.instance_path).mkdir(parents=True, exist_ok=True)
 
     db.init_app(app)
@@ -21,7 +19,12 @@ def create_app(config_name: str | None = None) -> Flask:
     login_manager.init_app(app)
     mail.init_app(app)
 
+    # Import models
     from .models import User
+
+    # Create tables automatically (temporary for Render Free)
+    with app.app_context():
+        db.create_all()
 
     @login_manager.user_loader
     def load_user(user_id: str):
