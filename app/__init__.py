@@ -6,6 +6,9 @@ from flask import Flask, render_template
 from config import config_by_name
 from .extensions import db, login_manager, mail, migrate
 
+git add .
+git commit -m "Create tables automatically"
+git push
 
 def create_app(config_name: str | None = None) -> Flask:
     app = Flask(__name__)
